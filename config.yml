@@ -1,0 +1,263 @@
+---
+pipeline_ouput:
+  save: true
+  file: "S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/pipeline-output.RData"
+
+convert_time_from_germany: true
+
+match_via_hub: false
+
+remove_variables: [comment, ids]
+
+remove_entries_with_values:
+  order_number: ["1148671", "1206009", "1150257", "1196790", "1183924", 
+      "1205482", "1154687", "1150260", "1157209", "1150258", "1203496", 
+      "1157210"]
+  question_single: ["Spontanmeldung_v1_f2_1", "Spontanmeldung_v1_f2_2", 
+      "Spontanmeldung_v2_f2_1", "Spontanmeldung_v2_f2_2",  
+      "Spontanmeldung_v2_f2_3", "Spontanmeldung_v2_f2_4"]
+
+remove_entries_ambiguous_rna_samples: true
+
+nako:
+  application_number: 664
+  keep_datasets: [answers, nasal_swabs_pcr, swabs, plasma, cpt, pbmc]
+  remove_vars: physician
+  guess_scale_level: true  
+  missing_codings: "-1"
+  missing_options: "-1 = Fehlende Rohdaten"
+  # Directly exporting on HZI's internal network takes a very long time 
+  # (more than 3h for 1.5GB). It is much faster to export locally (8 min for 
+  # 4GB) and move, better still compressing the files before moving (after 
+  # compressing to 7z the NAKO export was reduced from 4GB to 25MB, moved in 
+  # 1min).
+  export_path: C:/Users/sgh22/Documents/zifco/zifco-data-processing/data/for-nako
+
+dataset_types:
+  pia_questionnaires:
+    title: PIA questionnaires
+    description: Questionnaires filled in PIA by study participants
+  biosamples:
+    title: Biosamples
+    description: Description of samples and results of sample analyses
+    
+datasets:
+  all_data_sets:
+    raw_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten
+    save_native: false
+    read_native: true
+    native_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-raw-rds
+    save_processed: true
+    processed_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-processed-rds
+  answers:
+    raw_data_file: 01_Originaldaten/2022/export_221215/answers.csv
+    raw_data_native_format_file: answers.rds
+    dataset_type: pia_questionnaires
+    title: PIA answers
+    description: Answers to study questionnaire collected via the PIA app
+  answers_backup:
+    raw_data_file: datenexport04122020_Backup/Datenexport_Backup_201118.csv
+    raw_data_native_format_file: answers_backup.rds
+  pia_codebook:  
+    raw_data_file: i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-raw-initial/Json-Dateien ZIFCO-FB
+    raw_data_native_format_file: pia_codebook.rds
+  cpt_hub: 
+    raw_data_file: Daten_vom_HUB/ZIFCO_CPT_14_06.xlsx
+    raw_data_native_format_file: cpt_hub.rds
+  cpt_pia: 
+    raw_data_file: 01_Originaldaten/2022/export_221215/blood_samples.csv
+    raw_data_native_format_file: cpt_pia.rds
+  cpt:
+    ignore_on_loading: true
+    dataset_type: biosamples
+    title: CPT
+    description: CPT
+  examination:
+    raw_data_file: Austausch_SZ_HZI/df1_L3_210726.xlsx
+    raw_data_native_format_file: examination.rds
+  nasal_swabs_pcr:
+    raw_data_file: 01_Originaldaten/2022/export_221215/lab_results.csv
+    raw_data_native_format_file: nasal_swabs_pcr.rds
+    dataset_type: biosamples
+    title: PCR from nasal swabs
+    description: Results of PCR tests against a series of respiratory viruses
+  pbmc_1:
+    raw_data_file: Daten_vom_HUB/ZIFCO_PBMC_14_06.xlsx
+    raw_data_native_format_file: pbmc_1.rds
+  pbmc_2:
+    raw_data_file: Daten_vom_HUB/ZIFCO_24_08_export.xlsx
+    raw_data_native_format_file: pbmc_2.rds    
+  pbmc:
+    ignore_on_loading: true
+    dataset_type: biosamples
+    title: PBMC
+    description: PBMC
+  plasma:
+    raw_data_file: Daten_vom_HUB/ZIFCO_Plasma_14_06.xlsx
+    raw_data_native_format_file: plasma.rds
+    dataset_type: biosamples
+    title: Plasma
+    description: Plasma
+  samples:
+    raw_data_file: 01_Originaldaten/2022/export_221215/samples.csv
+    raw_data_native_format_file: samples.rds    
+    title: Samples
+    description: Samples
+  consent:
+    raw_data_file: 01_Originaldaten/2022/export_221215/settings.csv
+    raw_data_native_format_file: consent.rds
+  swabs:
+    raw_data_file: Daten_vom_HUB/ZIFCO_eswab_14_06.xlsx
+    raw_data_native_format_file: swabs.rds
+    dataset_type: biosamples
+    title: Swabs
+    description: Swabs
+
+variables:
+  participant_id:
+    original: [Proband, user_id, Pseudonym PIA]
+    title: Participant pseudonym
+    description: Pseudonym given to each participant by the NAKO via the PIA app
+  participant_id_hub:
+    original: Probanden-ID
+    title: HUB participant pseudonym
+    description: Participant pseudonym used internally by HUB labs
+  delivery_date:
+    original: [Eingangsdatum, Datum_Eingang]
+    type: date_time
+    title: Date of delivery
+  collection_date:
+    original: [Entnahmedatum, Datum_Abnahme]
+    type: date_time
+    title: Date of collection
+  sample_id:  
+    original: [Proben-ID, Proben_ID, Blutproben_ID, Bericht_ID]
+    title: Sample ID
+    description: Unique identifier for samples
+  sample_type:
+    original: Probenart
+    title: Sample type
+  primary_container:
+    original: Primärcontainer
+    title: Primary container
+  sample_container:
+    original: Probenbehälter
+  organisation_unit:
+    original: Organisationseinheit
+  initial_quantity:
+    original: Anfangsmenge
+    type: float
+    unit: gram
+    scale_level: metrisch
+  remaining_quantity:
+    original: Restmenge
+    type: float
+    unit: microlitre
+    scale_level: metrisch
+  concentration:
+    original: Konzentration
+    type: integer
+  first_centrifugation:
+    original: 1. Zentrifugation 
+  second_centrifugation:
+    original: 2. Zentrifugation 
+  partition_date:
+    original: Datum der Aufteilung 
+    type: date_time
+  storage_date:
+    original: Einlagerungsdatum
+    type: date_time
+  post_centrifugation:
+    original: Post-Zentrifugationszeit
+  post_centrifugation_date:
+    original: Post-Zentrifugationszeit (Datum)
+    type: date_time
+  comment:
+    original: [Bemerkung, Kommentar]
+  consent_blood_sample_collection:
+    original: Einwilligung Blutprobenentnahme
+    type: boolean
+  consent_result_communication:
+    original: Einwilligung Ergebnismitteilung
+    type: boolean
+  consent_sample_collection:   
+    original: Einwilligung Probenentnahme
+    type: boolean
+  test_participant:   
+    original: Testproband
+    type: boolean
+  analysis_date:
+    original: Datum_Analyse
+    type: date_time
+  reporting_date:
+    original: Datum_Mitteilung
+    type: date_time
+  pcr_target:
+    original: PCR
+  pcr_id:
+    original: PCR_ID
+  pcr_result:
+    original: Ergebnis
+  pcr_ct_value:
+    original: CT-Wert
+    type: float
+  order_number:
+    original: Auftragsnr
+  physician:
+    original: Arzt
+  question_id:
+    original: Frage
+  questionnaire_date:  
+    original: FB_Datum
+    type: date_time
+  answer_date:
+    original: Antwort_Datum
+    type: date_time
+  answer:
+    original: [Antwort, value]
+  answer_values_code:
+    original: [Kodierung_Code, values_code]
+  answer_values:
+    original: [Kodierung_Wert, values]
+  examination_date:
+    original: U.-Datum_Hauptphase
+    type: date_time
+  sample_status:
+    original: Status
+    dataset: [cpt_pia, samples]
+  question_status:
+    original: status
+    dataset: answers_backup
+  bakt_sample_id:
+    original: Bakt_Proben_ID
+  questionnaire_version:
+    original: questionnaire_version
+    type: integer
+  date_of_release_v1:
+    original: date_of_release_v1
+    type: date_time  
+  date_of_release_v2:
+    original: date_of_release_v2
+    type: date_time
+  date_of_issue:
+    original: date_of_issue
+    type: date_time
+  question_position:
+    original: qposition
+  answer_position:
+    original: aposition
+  question_is_notable:
+    original: is_notable
+  answer_type:
+    original: a_type
+  question_number:
+    original: versioning
+  date_of_release:
+    original: date_of_release
+    type: date_time
+  answer_option_value:
+    original: answer_option_text
+  answer_is_mandatory:
+    original: is_mandatory
+    type: boolean
+---
