@@ -6,12 +6,12 @@
 # WARNING:
 # - importing the RData can take a few minutes
 # - importing the CSV will likely take many hours.
-source_file_type <- "csv" # value can be either "rdata" or "csv"
+source_file_type <- "rdata" # value can be either "rdata" or "csv"
 
 path_to_source_file <- switch(
   source_file_type,
   rdata = "data/pipeline-output.RData",
-  csv = "data/test" # data/for-nako/NAKO-664/data/PIA_questionnaires"
+  csv = "data/for-nako/NAKO-664/data/PIA_questionnaires"
 )
 
 # Read the NAKO export
