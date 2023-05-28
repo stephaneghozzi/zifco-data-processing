@@ -582,11 +582,17 @@ export_for_nako <- function(for_nako, config) {
   dir.create(exp_dir, recursive = TRUE, showWarnings = FALSE)
   
   # Meta-data
-  metadata_file_name <- "metadata.csv"
   write_csv_for_nako(
-    for_nako$metadata, paste0(exp_dir, "/", metadata_file_name), "", TRUE
+    for_nako$metadata, paste0(exp_dir, "/metadata.csv"), "", TRUE
   )
-  
+
+  # Questionnaire names
+  write.csv(
+    data.frame(questionnaire = for_nako$questionnaire_names), 
+    paste0(exp_dir, "/questionnaire-names.csv"),
+    row.names = FALSE
+  )
+    
   # Data
   exp_data_dir <- paste0(exp_dir, "/data")
   dir.create(exp_data_dir, recursive = TRUE, showWarnings = FALSE)
