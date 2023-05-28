@@ -197,7 +197,7 @@ save_processed_datasets <- function(dataset_list, for_nako, config) {
   
   datasources <- list(general = dataset_list, nako = for_nako)
   
-  for (ds in names(datasource)) {
+  for (ds in names(datasources)) {
     
     datalist <- datasources[[ds]]
   
