@@ -92,9 +92,7 @@ if (config$pipeline_ouput$save) {
 t11 <- Sys.time()
 
 # Export for NAKO ----
-
-# Un-comment code line below to export NAKO data-sets in properly formatted 
-# CSV files. 
+ 
 export_for_nako(for_nako, config)
 t12 <- Sys.time()
 

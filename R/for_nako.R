@@ -32,21 +32,21 @@ transform_for_nako <- function(dataset_list, config) {
   questionnaire_col <- var_dict_nako$nako[
     var_dict_nako$original == "questionnaire_name"
   ]
-  dataset_list_nako_s <- split_answers_in_questionnaires_for_nako(
+  questionnaire_names <- standardize_questionnaire_names(
+    unique(dataset_list_nako$answers[[questionnaire_col]])
+  )
+  dataset_list_nako <- split_answers_in_questionnaires_for_nako(
     dataset_list_nako, questionnaire_col
   )
   
   # Generate the meta-data
-  questionnaire_names <- standardize_questionnaire_names(
-    unique(dataset_list_nako$answers[[questionnaire_col]])
-  )
   metadata_nako <- generate_meta_data_for_nako(
-    dataset_list_nako_s, questionnaire_names, config, var_dict_nako
+    dataset_list_nako, questionnaire_names, config, var_dict_nako
   )
   
   for_nako <- list(
     metadata = metadata_nako,
-    data = dataset_list_nako_s,
+    data = dataset_list_nako,
     questionnaire_names = questionnaire_names
   )
   
@@ -227,8 +227,8 @@ code_missing_values_for_nako <- function(dataset_list_nako, config) {
     ds_missings <- ds_missings |> 
       dplyr::mutate(
         dplyr::across(
-          .fns = \(x) 
-          sapply(x, \(x1) if(is.na(x1)) { -1 } else { as.numeric(NA) }) |> 
+          dplyr::everything(),
+          \(x) sapply(x, \(x1) if(is.na(x1)) { -1 } else { as.numeric(NA) }) |> 
             stats::setNames(NULL)
         )
       )
@@ -236,8 +236,8 @@ code_missing_values_for_nako <- function(dataset_list_nako, config) {
     ds_final <- dataset_list_nako[[nm]] |>
       dplyr::mutate(
         dplyr::across(
-          .fns = \(x) 
-          sapply(x, \(x1) if(is.na(x1)) { NA } else { x1 }) |> 
+          dplyr::everything(),
+          \(x) sapply(x, \(x1) if(is.na(x1)) { NA } else { x1 }) |> 
             stats::setNames(NULL)
         )
       ) |> 
@@ -294,11 +294,10 @@ split_answers_in_questionnaires_for_nako <- function(dataset_list_nako,
   )
   
   # Replace the list of answers
-  dataset_list_nako_s <- dataset_list_nako
-  dataset_list_nako_s[["answers"]] <- NULL
-  dataset_list_nako_s <- append(dataset_list_nako_s, answers_questionnaires)
+  dataset_list_nako[["answers"]] <- NULL
+  dataset_list_nako <- append(dataset_list_nako, answers_questionnaires)
   
-  return(dataset_list_nako_s)
+  return(dataset_list_nako)
   
 }
 
@@ -311,27 +310,25 @@ standardize_questionnaire_names <- function(q_names) {
 }
 
 # ...
-generate_meta_data_for_nako <- function(dataset_list_nako_s, 
+generate_meta_data_for_nako <- function(dataset_list_nako, 
   questionnaire_names, config, var_dict_nako) {
   
   metadata_nako <- tibble::tibble()
   
-  for (nm in names(dataset_list_nako_s)) {
+  for (nm in names(dataset_list_nako)) {
     
     types_titles <- get_titles_descritptions_for_nako(
       nm, config, questionnaire_names
     )
-    dataset_type_title <- types_titles$dataset_type_title
-    dataset_description <- types_titles$dataset_description
-    
+
     # Meta-data of individual variables
-    for(var in names(dataset_list_nako_s[[nm]])) {
+    for(var in names(dataset_list_nako[[nm]])) {
       
       # Columns encoding missing values have names ending with "_m" and another
       # column with their names without the suffix "_m" is present in the data
       # set. 
       is_missing_col <- (substr(var, nchar(var)-1, nchar(var)) == "_m" 
-        & substr(var, 1, nchar(var)-2) %in% names(dataset_list_nako_s[[nm]]))
+        & substr(var, 1, nchar(var)-2) %in% names(dataset_list_nako[[nm]]))
       
       if (var == "Proband") {
         var_name_original <- "participant_id"
@@ -395,7 +392,7 @@ generate_meta_data_for_nako <- function(dataset_list_nako_s,
         var_type <- config$variables[[var_name_original]]$type
         var_type <- ifelse(
           is.null(var_type),
-          typeof(dataset_list_nako_s[[nm]][[var]]), 
+          typeof(dataset_list_nako[[nm]][[var]]), 
           var_type
         )
         
@@ -441,10 +438,12 @@ generate_meta_data_for_nako <- function(dataset_list_nako_s,
       
       # Bring all meta-data together
       metadata_nako_var <- tibble::tibble(
-        `Abschnitt 1.Titel` = null_to_na(dataset_type_title),
-        `Abschnitt 1.Beschreibung` = null_to_na(dataset_type_description),
-        `Abschnitt 2.Titel` = null_to_na(dataset_title),
-        `Abschnitt 2.Beschreibung` = null_to_na(dataset_description),
+        `Abschnitt 1.Titel` = null_to_na(types_titles$dataset_type_title),
+        `Abschnitt 1.Beschreibung` = 
+          null_to_na(types_titles$dataset_type_description),
+        `Abschnitt 2.Titel` = null_to_na(types_titles$dataset_title),
+        `Abschnitt 2.Beschreibung` = 
+          null_to_na(types_titles$dataset_description),
         Name = null_to_na(var),
         Titel = null_to_na(var_title),
         Beschreibung = null_to_na(var_description),
@@ -486,8 +485,7 @@ get_titles_descritptions_for_nako <- function(nm, config, questionnaire_names) {
     }
   }
   
-  dataset_type_description <- 
-    config$dataset_types[[dataset_type]]$description
+  dataset_type_description <- config$dataset_types[[dataset_type]]$description
   
   # Meta-data of data set
   dataset_title <- replace_null_default(
@@ -503,7 +501,9 @@ get_titles_descritptions_for_nako <- function(nm, config, questionnaire_names) {
   
   return(
     list(
-      dataset_type_title = dataset_type_title, 
+      dataset_type_title = dataset_type_title,
+      dataset_type_description = dataset_type_description,
+      dataset_title = dataset_title,
       dataset_description = dataset_description
     )
   )
@@ -603,13 +603,12 @@ export_for_nako <- function(for_nako, config) {
     types_titles <- get_titles_descritptions_for_nako(
       nm, config, for_nako$questionnaire_names
     )
-    dataset_type_title <- types_titles$dataset_type_title
     
-    if (!is.null(dataset_type_title)) {
+    if (!is.null(types_titles$dataset_type_title)) {
       dst_dir <- paste0(
         exp_data_dir,
         "/",
-        gsub("[^A-z0-9]", "_", dataset_type_title)
+        gsub("[^A-z0-9]", "_", types_titles$dataset_type_title)
       )
       dir.create(dst_dir, recursive = TRUE, showWarnings = FALSE)
     } else {
@@ -617,14 +616,10 @@ export_for_nako <- function(for_nako, config) {
     }
     
     # Data set
-    dataset_title <- replace_null_default(
-      config$datasets[[nm]]$title,
-      nm
-    )
     ds_file <- paste0(
       dst_dir,
       "/",
-      gsub("[^A-z0-9]", "_", dataset_title), 
+      gsub("[^A-z0-9]", "_", types_titles$dataset_title), 
       ".csv"
     )
     
