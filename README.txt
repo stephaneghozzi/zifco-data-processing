@@ -26,3 +26,5 @@ The files indicated with (*) are stored in the confidential folder on HZI's inte
 
 - "README.txt" is this document
 
+- "sample-nako-export.R" is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
+
