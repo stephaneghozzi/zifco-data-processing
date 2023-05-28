@@ -1,7 +1,7 @@
 ---
 pipeline_ouput:
   save: true
-  file: "S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/pipeline-output.RData"
+  file: "data/pipeline-output.RData"
 
 convert_time_from_germany: true
 
@@ -31,7 +31,7 @@ nako:
   # 4GB) and move, better still compressing the files before moving (after 
   # compressing to 7z the NAKO export was reduced from 4GB to 25MB, moved in 
   # 1min).
-  export_path: C:/Users/sgh22/Documents/zifco/zifco-data-processing/data/for-nako
+  export_path: data/for-nako
 
 dataset_types:
   pia_questionnaires:
@@ -46,9 +46,9 @@ datasets:
     raw_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten
     save_native: false
     read_native: true
-    native_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-raw-rds
+    native_dir: data/data-raw-rds
     save_processed: true
-    processed_dir: S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-processed-rds
+    processed_dir: data/data-processed-rds
   answers:
     raw_data_file: 01_Originaldaten/2022/export_221215/answers.csv
     raw_data_native_format_file: answers.rds
