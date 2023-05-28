@@ -28,14 +28,26 @@ transform_for_nako <- function(dataset_list, config) {
   # Move column of participant pseudonyms `Proband` to first position
   dataset_list_nako <- move_participant_to_front_for_nako(dataset_list_nako)
   
+  # Split answers into different questionnaires
+  questionnaire_col <- var_dict_nako$nako[
+    var_dict_nako$original == "questionnaire_name"
+  ]
+  dataset_list_nako_s <- split_answers_in_questionnaires_for_nako(
+    dataset_list_nako, questionnaire_col
+  )
+  
   # Generate the meta-data
+  questionnaire_names <- standardize_questionnaire_names(
+    unique(dataset_list_nako$answers[[questionnaire_col]])
+  )
   metadata_nako <- generate_meta_data_for_nako(
-    dataset_list_nako, config, var_dict_nako
+    dataset_list_nako_s, questionnaire_names, config, var_dict_nako
   )
   
   for_nako <- list(
     metadata = metadata_nako,
-    data = dataset_list_nako
+    data = dataset_list_nako_s,
+    questionnaire_names = questionnaire_names
   )
   
   return(for_nako)
@@ -269,52 +281,57 @@ move_participant_to_front_for_nako <- function(dataset_list_nako) {
 }
 
 # ...
-generate_meta_data_for_nako <- function(dataset_list_nako, config, 
-  var_dict_nako) {
+split_answers_in_questionnaires_for_nako <- function(dataset_list_nako, 
+  questionnaire_col) {
+
+  # Split the answers in questionnaires
+  answers_questionnaires <- split(
+    dataset_list_nako$answers, 
+    f = dataset_list_nako$answers[[questionnaire_col]]
+  )
+  names(answers_questionnaires) <- standardize_questionnaire_names(
+    names(answers_questionnaires)
+  )
+  
+  # Replace the list of answers
+  dataset_list_nako_s <- dataset_list_nako
+  dataset_list_nako_s[["answers"]] <- NULL
+  dataset_list_nako_s <- append(dataset_list_nako_s, answers_questionnaires)
+  
+  return(dataset_list_nako_s)
+  
+}
+
+
+# ... 
+standardize_questionnaire_names <- function(q_names) {  
+  
+  gsub("[^A-z0-9]", "_", q_names)
+  
+}
+
+# ...
+generate_meta_data_for_nako <- function(dataset_list_nako_s, 
+  questionnaire_names, config, var_dict_nako) {
   
   metadata_nako <- tibble::tibble()
   
-  for (nm in names(dataset_list_nako)) {
+  for (nm in names(dataset_list_nako_s)) {
     
-    # Meta-data of type of data set
-    dataset_type <- config$datasets[[nm]]$dataset_type
-    dataset_type_title <- dataset_type_title <- ifelse(
-      is.null(dataset_type),
-      NULL,
-      config$dataset_types[[dataset_type]]$title
+    types_titles <- get_titles_descritptions_for_nako(
+      nm, config, questionnaire_names
     )
-    
-    if (!is.null(dataset_type_title)) {
-      if (nchar(dataset_type_title) > 60) {
-        stop("Data-set-type title should have 60 signs or less. Please ",
-          "change, in the config file, the title for variable ", dataset_type, 
-          ".")
-      }
-    }
-    
-    dataset_type_description <- 
-      config$dataset_types[[dataset_type]]$description
-    
-    # Meta-data of data set
-    dataset_title <- replace_null_default(
-      config$datasets[[nm]]$title,
-      nm
-    )
-    if (nchar(dataset_title) > 60) {
-      stop("Data-set title should have 60 signs or less. Please change, ",
-        "in the config file, the title for data set ", nm, ".")
-    }
-    
-    dataset_description <- config$datasets[[nm]]$description
+    dataset_type_title <- types_titles$dataset_type_title
+    dataset_description <- types_titles$dataset_description
     
     # Meta-data of individual variables
-    for(var in names(dataset_list_nako[[nm]])) {
+    for(var in names(dataset_list_nako_s[[nm]])) {
       
       # Columns encoding missing values have names ending with "_m" and another
       # column with their names without the suffix "_m" is present in the data
       # set. 
       is_missing_col <- (substr(var, nchar(var)-1, nchar(var)) == "_m" 
-        & substr(var, 1, nchar(var)-2) %in% names(dataset_list_nako[[nm]]))
+        & substr(var, 1, nchar(var)-2) %in% names(dataset_list_nako_s[[nm]]))
       
       if (var == "Proband") {
         var_name_original <- "participant_id"
@@ -378,7 +395,7 @@ generate_meta_data_for_nako <- function(dataset_list_nako, config,
         var_type <- config$variables[[var_name_original]]$type
         var_type <- ifelse(
           is.null(var_type),
-          typeof(dataset_list_nako[[nm]][[var]]), 
+          typeof(dataset_list_nako_s[[nm]][[var]]), 
           var_type
         )
         
@@ -443,6 +460,53 @@ generate_meta_data_for_nako <- function(dataset_list_nako, config,
   }
   
   return(metadata_nako)
+  
+}
+
+# ...
+get_titles_descritptions_for_nako <- function(nm, config, questionnaire_names) {
+  
+  # For individual questionnaires, use the overall title and description
+  # for all answers
+  nm_dst <- ifelse(nm %in% questionnaire_names, "answers", nm)
+  
+  # Meta-data of type of data set
+  dataset_type <- config$datasets[[nm_dst]]$dataset_type
+  dataset_type_title <- ifelse(
+    is.null(dataset_type),
+    NULL,
+    config$dataset_types[[dataset_type]]$title
+  )
+  
+  if (!is.null(dataset_type_title)) {
+    if (nchar(dataset_type_title) > 60) {
+      stop("Data-set-type title should have 60 signs or less. Please ",
+        "change, in the config file, the title for variable ", dataset_type, 
+        ".")
+    }
+  }
+  
+  dataset_type_description <- 
+    config$dataset_types[[dataset_type]]$description
+  
+  # Meta-data of data set
+  dataset_title <- replace_null_default(
+    config$datasets[[nm]]$title,
+    nm
+  )
+  if (nchar(dataset_title) > 60) {
+    stop("Data-set title should have 60 signs or less. Please change, ",
+      "in the config file, the title for data set ", nm, ".")
+  }
+  
+  dataset_description <- config$datasets[[nm_dst]]$description
+  
+  return(
+    list(
+      dataset_type_title = dataset_type_title, 
+      dataset_description = dataset_description
+    )
+  )
   
 }
 
@@ -530,12 +594,10 @@ export_for_nako <- function(for_nako, config) {
   for (nm in names(for_nako$data)) {
     
     # Data-set type
-    dataset_type <- config$datasets[[nm]]$dataset_type
-    dataset_type_title <- ifelse(
-      is.null(dataset_type),
-      NULL,
-      config$dataset_types[[dataset_type]]$title
+    types_titles <- get_titles_descritptions_for_nako(
+      nm, config, for_nako$questionnaire_names
     )
+    dataset_type_title <- types_titles$dataset_type_title
     
     if (!is.null(dataset_type_title)) {
       dst_dir <- paste0(
