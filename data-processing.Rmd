@@ -29,7 +29,7 @@ config <- yaml::read_yaml(config_file)
 ```{r}
 # Either run the processing pipeline or load the results of a previous run
 # source("pipeline.R")
-load("S:/PROJACTIVE/ZIFCO-NAKO-Daten/i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/pipeline-output.RData")
+load("data/pipeline-output.RData")
 ```
 
 ```{r}
@@ -220,6 +220,22 @@ for (nm in names(for_nako$data)) {
   }
   s <- s+1
 }
+```
+
+</div>
+
+### Variable names for NAKO {.tabset .tabset-pills}
+
+<p><button class="btn btn-primary" data-toggle="collapse" data-target="#preview-nako-varnames">show/hide meta-data for NAKO</button></p>  
+
+<div id="preview-nako-varnames" class="collapse">  
+
+```{r}
+datatable(
+  for_nako$questionnaire_names, 
+  rownames = FALSE, 
+  options = list(scrollX = TRUE)
+)
 ```
 
 </div>
@@ -438,9 +454,11 @@ A column containing the participant pseudonym is added to all data sets where it
 
 ## Export for NAKO
 
-The processed data sets are further transformed to meet the NAKO's requirements, meta-data are generated, and all are exported as CSV's in the required formats. See the previews in the sections [Data for NAKO](#data-for-nako) and [Meta-data for NAKO](#meta-data-for-nako).
+The processed data sets are further transformed to meet the NAKO's requirements, meta-data are generated, and all are exported as CSV's in the required formats. See the previews in the sections [Data for NAKO](#data-for-nako), [Variable names for NAKO](#variable-names-for-nako) and [Meta-data for NAKO](#meta-data-for-nako).
 
 One specific further data-set operation is the merging of `answers` with `pia_codebook`: the information on each question and answers are added in `answers` itself because the NAKO wants data sets that all have a one participant per row. (An alternative would be to print question text, answer options, etc., in the NAKO meta data, but this would be very cumbersome to use and possibly not possible, as the text in Excel cells might exceed a maximum allowed size.)
+
+After that, the answers are split in individual questionnaires.
 
 The requirements on how to contribute data to NAKO are described (in German) in the document "TFS-Info-12a", see the [accompanying file](documents/TFS-Info-12a_Informationen_zu_Metadaten+Ergebnisdatenuebermittlung_v2_final.pdf), also available [online](https://transfer.nako.de/transfer/media/TFS-Info-12a_Informationen_zu_Metadaten+Ergebnisdatenuebermittlung_v2_final.pdf).
 
