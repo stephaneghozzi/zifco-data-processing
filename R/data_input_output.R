@@ -186,31 +186,48 @@ load_dataset <- function(dataset_file) {
 } 
 
 # ...
-save_processed_datasets <- function(dataset_list, config) {
+save_processed_datasets <- function(dataset_list, for_nako, config) {
   
   global_out_path <- config$datasets$all_data_sets$processed_dir
+  out_path_all <- ifelse(
+    !is.null(global_out_path),
+    paste0(global_out_path, "/"),
+    ""
+  )
   
-  for (nm in names(dataset_list)) {
+  datasources <- list(general = dataset_list, nako = for_nako)
+  
+  for (ds in names(datasource)) {
     
-    out_path <- ifelse(
-      !is.null(global_out_path),
-      paste0(global_out_path, "/"),
-      ""
-    )
-    
-    custom_file_name <- config$datasets[[nm]]$clean_data_native_format_file
-    
-    full_file_name <- ifelse(
-      !is.null(custom_file_name),
-      paste0(out_path, custom_file_name),
-      paste0(out_path, nm, ".rds")
-    )
-    
-    dir.create(
-      dirname(full_file_name), recursive = TRUE, showWarnings = FALSE
-    )
-    
-    saveRDS(dataset_list[[nm]], file = full_file_name) 
+    datalist <- datasources[[ds]]
+  
+    for (nm in names(datalist)) {
+      
+      if (ds == "general") {
+        custom_file_name <- config$datasets[[nm]]$clean_data_native_format_file
+      } else {
+        custom_file_name <- NULL
+      }
+      
+      if (ds == "nako") {
+        out_path <- paste0(out_path_all, "for_nako/")
+      } else {
+        out_path <- out_path_all
+      }
+      
+      full_file_name <- ifelse(
+        !is.null(custom_file_name),
+        paste0(out_path, custom_file_name),
+        paste0(out_path, nm, ".rds")
+      )
+      
+      dir.create(
+        dirname(full_file_name), recursive = TRUE, showWarnings = FALSE
+      )
+      
+      saveRDS(datalist[[nm]], file = full_file_name) 
+      
+    }
     
   }
   

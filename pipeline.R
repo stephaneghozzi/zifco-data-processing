@@ -51,11 +51,12 @@ t5 <- Sys.time()
 dataset_list <- dataset_operations(dataset_list_clean, config)
 t6 <- Sys.time()
 
-save_processed_datasets(dataset_list, config)
-t7 <- Sys.time()
-
 # Transform data sets and generate meta-data for NAKO 
 for_nako <- transform_for_nako(dataset_list, config)
+t7 <- Sys.time()
+
+# Save
+save_processed_datasets(dataset_list, for_nako, config)
 t8 <- Sys.time()
 
 # Checks ----
@@ -67,7 +68,9 @@ variable_names_checks <- check_variable_names(variable_names_count,
 ambiguousness_matching_clean <- check_unambiguousness_matching_ids(
   dataset_list_clean, config
 )
-ambiguousness_matching <- check_unambiguousness_matching_ids(dataset_list)
+ambiguousness_matching <- check_unambiguousness_matching_ids(
+  dataset_list, config
+)
 t9 <- Sys.time()
 
 set.seed(34235)
