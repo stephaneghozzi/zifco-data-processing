@@ -11,8 +11,12 @@ arrange_codebook_to_table <- function(codebook) {
         question_text = as.character(null_to_na(qu$text)),
         question_position = as.integer(null_to_na(qu$position)),
         is_mandatory = as.logical(null_to_na(qu$is_mandatory)),
-        expires_after_days = as.integer(null_to_na(qu$expires_after_days)),
-        finalises_after_days = as.integer(null_to_na(qu$finalises_after_days))
+        expires_after_days = as.integer(
+          null_to_na(codebook[[nm]]$expires_after_days)
+        ),
+        finalises_after_days = as.integer(
+          null_to_na(codebook[[nm]]$finalises_after_days)
+        )
       )
 
       if (length(qu$answer_options) == 0) {
