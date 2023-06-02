@@ -23,7 +23,8 @@ nako:
   application_number: 664
   keep_datasets: [answers, nasal_swabs_pcr, swabs, plasma, cpt, pbmc]
   remove_vars: physician
-  guess_scale_level: true  
+  guess_scale_level: true
+  replace_formatting_char_with: "___"
   missing_codings: "-1"
   missing_options: "-1 = Fehlende Rohdaten"
   # Directly exporting on HZI's internal network takes a very long time 

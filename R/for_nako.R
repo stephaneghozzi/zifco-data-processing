@@ -22,6 +22,9 @@ transform_for_nako <- function(dataset_list, config) {
   # Format dates and date-times
   dataset_list_nako <- format_dates_times_for_nako(dataset_list_nako)
   
+  # Protect CSV formatting
+  dataset_list_nako <- protect_csv_formatting_for_nako(dataset_list_nako, config)
+  
   # Code missing values
   dataset_list_nako <- code_missing_values_for_nako(dataset_list_nako, config)
   
@@ -201,6 +204,27 @@ format_dates_times_for_nako <- function(dataset_list_nako) {
   
   return(dataset_list_nako)
   
+}
+
+# ...
+protect_csv_formatting_for_nako <- function(dataset_list_nako, config) {
+  # Replace text that might break CSV formatting such as end-of-line or 
+  # semi-colon.
+  
+  replacement <- config$nako$replace_formatting_char_with
+  for (nm in names(dataset_list_nako)) {
+    
+    dataset_list_nako[[nm]] <- dataset_list_nako[[nm]] |> 
+      dplyr::mutate(
+        dplyr::across(
+          tidyselect::where(\(x) inherits(x, "character")),
+          \(x) gsub("\\n", replacement, gsub(";", replacement, x))
+        )
+      )
+    
+  }
+  
+  return(dataset_list_nako)
 }
 
 # ...

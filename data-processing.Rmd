@@ -307,6 +307,7 @@ The configuration contains the following elements:
   - `keep_datasets`: set of strings, names of data sets to export
   - `remove_vars`: set of strings, variables to remove from the export
   - `guess_scale_level`: `true` or `false`, whether the program should guess the scale level (metric, ordinal, nominal, ...) of a variable based on it's type (integer, character, date, ...)     
+  - `replace_formatting_char_with`: string, which replaces the characters used for formatting CSV in the text fields, so as to avoid breaking the format of the NAKO exports 
   - `missing_codings`: string, how missing values are to be encoded; currently only the value `"-1"` is accepted
   - `missing_options`: string, what to print in the NAKO meta-data as option (fixed set of possible values that a variable can take); currently only the value `"-1 = Fehlende Rohdaten"` is accepted
   - `export_path`: string, path to directory were the NAKO files should be written
@@ -458,6 +459,8 @@ The processed data sets are further transformed to meet the NAKO's requirements,
 
 One specific further data-set operation is the merging of `answers` with `pia_codebook`: the information on each question and answers are added in `answers` itself because the NAKO wants data sets that all have a one participant per row. (An alternative would be to print question text, answer options, etc., in the NAKO meta data, but this would be very cumbersome to use and possibly not possible, as the text in Excel cells might exceed a maximum allowed size.)
 
+Moreover, since the data is exported as CSV, one needs to be careful not to use as data characters that are used for CSV formatting. Thus, given NAKO's requirements, the string for end-of-line "\\n" and for new cell ";" are replace by a string as defined in the config file.
+
 After that, the answers are split in individual questionnaires.
 
 The requirements on how to contribute data to NAKO are described (in German) in the document "TFS-Info-12a", see the [accompanying file](documents/TFS-Info-12a_Informationen_zu_Metadaten+Ergebnisdatenuebermittlung_v2_final.pdf), also available [online](https://transfer.nako.de/transfer/media/TFS-Info-12a_Informationen_zu_Metadaten+Ergebnisdatenuebermittlung_v2_final.pdf).
@@ -472,7 +475,18 @@ Variable names have to start with "u" followed by the NAKO-application number an
 
 To ensure that two different variables have different names after being shortened, a suffix with "_" and a number is added to the 16 first characters. (This works if their are 9 or less different variables with identical names after shortening.)
 
-Missing values should be encoded as a negative integer with the meaning of each possible value described in the column "Option". The document suggests an encoding with four values, "-1", "-2", "-3", "-4"; at the moment everything is "-1" = "Fehlende Rohdaten". This seems to correspond to the vast majority of the missing values appearing in the exported data sets.
+In the column containing information or results (i.e., those without the suffix "_m") the value `null` is used to indicate where a value is missing. Empty fields, e.g., because there is no follow-up question, are left empty.
+
+In the columns containing information on the missing values (i.e., the columns with the suffix "_m"), the latter should be encoded as a negative integer with the meaning of each possible value described in the column "Option". The document suggests an encoding with four values, "-1", "-2", "-3", "-4"; at the moment everything is "-1" = "Fehlende Rohdaten". This seems to correspond to the vast majority of the missing values appearing in the exported data sets.
+
+### Warnings concerning reading the CSVs in Excel
+
+Excel can open CSVs but two displaying problems have been encountered:
+
+- special characters, in particular accentuated German characters are "glitchy", e.g., "K√§ltegef√ºhl" instead of "Kältegefühl"; this is probably because of the imposed encoding in UTF-8, which is standard almost everywhere and required by the NAKO; characters are displayed properly elsewhere, including Word with encoding UTF-8
+- Excel tries to interpret "-1 = Fehlende Rohdaten" in the meta-data as an equation and adds a "="sign at the beginning of the corresponding cell...!
+
+**You can use Excel to view the CSVs, but do not save them from Excel!**
 
 # Descriptive statistics
 
