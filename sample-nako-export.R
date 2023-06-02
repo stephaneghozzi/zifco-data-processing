@@ -78,7 +78,11 @@ for (qn in names(pia_answers)) {
   for (i in 1:length(pia_answers_samples)) {
     
     path_to_export_file <- paste0(
-      path_to_export_folder, "/", qn, "-sample-", i, ".csv"
+      path_to_export_folder, 
+      "/", 
+      qn, 
+      ifelse(length(pia_answers_samples) > 1, paste0("-sample-", i), ""), 
+      ".csv"
     )
     
     write.table(
