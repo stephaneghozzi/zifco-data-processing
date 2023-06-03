@@ -24,7 +24,7 @@ nako:
   keep_datasets: [answers, nasal_swabs_pcr, swabs, plasma, cpt, pbmc]
   remove_vars: physician
   guess_scale_level: true
-  replace_formatting_char_with: "___"
+  replace_formatting_char_with: "_"
   missing_codings: "-1"
   missing_options: "-1 = Fehlende Rohdaten"
   # Directly exporting on HZI's internal network takes a very long time 
@@ -60,7 +60,7 @@ datasets:
     raw_data_file: datenexport04122020_Backup/Datenexport_Backup_201118.csv
     raw_data_native_format_file: answers_backup.rds
   pia_codebook:  
-    raw_data_file: i.Vacc_Skripte/ZIFCO_cleaning/stephane-ghozzi/zifco-data-processing/data/data-raw-initial/Json-Dateien ZIFCO-FB
+    raw_data_file: data/data-raw-initial/Json-Dateien ZIFCO-FB
     raw_data_native_format_file: pia_codebook.rds
   cpt_hub: 
     raw_data_file: Daten_vom_HUB/ZIFCO_CPT_14_06.xlsx
