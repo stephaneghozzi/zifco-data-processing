@@ -42,22 +42,29 @@ t4 <- Sys.time()
 
 # Standardize variable names, values, formats; clean variable values
 dataset_list_std <- standardize_variable_names(dataset_list_raw, var_prop_std)
+t5 <- Sys.time()
+
 dataset_list_clean <- clean_datasets(
   dataset_list_std, var_prop_std, config$convert_time_from_germany
 )
-t5 <- Sys.time()
+t6 <- Sys.time()
 
 # Data set operations (filter, merge)
 dataset_list <- dataset_operations(dataset_list_clean, config)
-t6 <- Sys.time()
+t7 <- Sys.time()
 
 # Transform data sets and generate meta-data for NAKO 
 for_nako <- transform_for_nako(dataset_list, config)
-t7 <- Sys.time()
+t8 <- Sys.time()
 
 # Save
 save_processed_datasets(dataset_list, for_nako, config)
-t8 <- Sys.time()
+t9 <- Sys.time()
+
+# Export for NAKO 
+
+export_for_nako(for_nako, config)
+t10 <- Sys.time()
 
 # Checks ----
 
@@ -71,7 +78,7 @@ ambiguousness_matching_clean <- check_unambiguousness_matching_ids(
 ambiguousness_matching <- check_unambiguousness_matching_ids(
   dataset_list, config
 )
-t9 <- Sys.time()
+t11 <- Sys.time()
 
 set.seed(34235)
 sample_indices <- sample(
@@ -82,17 +89,11 @@ sample_indices <- sample(
 answers_sample <- dataset_list_clean$answers[sample_indices,]
 pia_empty_answers_checks_sample <- check_pia_empty_answers(answers_sample)
 pia_multiple_answers_checks_sample <- check_pia_multiple_answers(answers_sample)
-t10 <- Sys.time()
+t12 <- Sys.time()
 
 # Save workspace ----
 
 if (config$pipeline_ouput$save) {
   save.image(file = config$pipeline_ouput$file)  
 }
-t11 <- Sys.time()
-
-# Export for NAKO ----
- 
-export_for_nako(for_nako, config)
-t12 <- Sys.time()
-
+t13 <- Sys.time()
