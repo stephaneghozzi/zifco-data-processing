@@ -83,6 +83,8 @@ format_specific_variable_values <- function(dataset_name, dataset_df) {
         \(x) dplyr::case_when(
           x == "t" ~ TRUE,
           x == "f" ~ FALSE,
+          as.logical(x) ~ TRUE,
+          !as.logical(x) ~ FALSE,
           TRUE ~ NA
         )
       )
@@ -97,8 +99,7 @@ format_specific_variable_values <- function(dataset_name, dataset_df) {
       dplyr::mutate(
         dplyr::across(
           dplyr::any_of(vn),
-          format_ID_variables,
-          vn
+          \(x) format_ID_variables(x, n)
         )
       )
   }
