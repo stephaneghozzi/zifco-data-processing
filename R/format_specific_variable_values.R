@@ -99,7 +99,7 @@ format_specific_variable_values <- function(dataset_name, dataset_df) {
       dplyr::mutate(
         dplyr::across(
           dplyr::any_of(vn),
-          \(x) format_ID_variables(x, n)
+          \(x) format_ID_variables(x, vn)
         )
       )
   }
