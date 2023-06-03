@@ -33,7 +33,7 @@ Documentation:
 - procedure to process a new data set with new results
 
 Data processing:
-- change NAKO metadata, variable names without re-running
+- change NAKO metadata, variable names without re-processing the data
 - produce have synthetic data to try and test stuff
 - print in console and report when data has been modified (e.g., line break or semi-colon removed from text to avoid breaking CSV formatting)
 

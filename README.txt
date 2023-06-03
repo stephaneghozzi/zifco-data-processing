@@ -28,3 +28,4 @@ The files indicated with (*) are stored in the confidential folder on HZI's inte
 
 - "sample-nako-export.R" is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
 
+- "update-nako-metadata.R" is a script that runs the end of the processing pipeline, e.g., to only change the description of variables and data sets the NAKO metadata exported
