@@ -66,6 +66,12 @@ t9 <- Sys.time()
 export_for_nako(for_nako, config)
 t10 <- Sys.time()
 
+# Optional: Generate samples of NAKO exports
+if (config$nako$generate_nako_samples) {
+  source("sample_nako_export.R")
+}
+t11 <- Sys.time()
+
 # Checks ----
 
 variable_names_count <- count_variable_names(dataset_list_raw)
@@ -78,7 +84,7 @@ ambiguousness_matching_clean <- check_unambiguousness_matching_ids(
 ambiguousness_matching <- check_unambiguousness_matching_ids(
   dataset_list, config
 )
-t11 <- Sys.time()
+t12 <- Sys.time()
 
 set.seed(34235)
 sample_indices <- sample(
@@ -89,11 +95,11 @@ sample_indices <- sample(
 answers_sample <- dataset_list_clean$answers[sample_indices,]
 pia_empty_answers_checks_sample <- check_pia_empty_answers(answers_sample)
 pia_multiple_answers_checks_sample <- check_pia_multiple_answers(answers_sample)
-t12 <- Sys.time()
+t13 <- Sys.time()
 
 # Save workspace ----
 
 if (config$pipeline_ouput$save) {
   save.image(file = config$pipeline_ouput$file)  
 }
-t13 <- Sys.time()
+t14 <- Sys.time()

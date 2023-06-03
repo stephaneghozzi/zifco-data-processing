@@ -6,6 +6,10 @@ Code:
 - refactor, especially standardization of variable names
 - harmonize input/output code for data and meta data (map+do.call vs. for)	
 - add test: in NAKO export, in columns for missings, only `null` or `-1`
+- better integrate sampling of NAKO export in pipeline: 
+	- put its options in the config file
+	- make it one function
+	- integrate it in NAKO export instead of re-loading data
 
 Task management:
 - produce clean issues and a clean backlog

@@ -311,6 +311,7 @@ The configuration contains the following elements:
   - `missing_codings`: string, how missing values are to be encoded; currently only the value `"-1"` is accepted
   - `missing_options`: string, what to print in the NAKO meta-data as option (fixed set of possible values that a variable can take); currently only the value `"-1 = Fehlende Rohdaten"` is accepted
   - `export_path`: string, path to directory were the NAKO files should be written
+  - `generate_samples`: logical, whether to generate samples of the tables exported for the NAKO
 - `dataset_types`: list of broad categories of data-sets, currently used for organizing the NAKO export
   - {data-set-type name}: list of configurations for this data-set type 
   - `title`: string, title of the data-set type; used for NAKO export
@@ -494,6 +495,10 @@ Excel can open CSVs but two displaying problems have been encountered:
 - Excel tries to interpret "-1 = Fehlende Rohdaten" in the meta-data as an equation and adds a "="sign at the beginning of the corresponding cell...!
 
 **You can use Excel to view the CSVs, but do not save them from Excel!**
+
+### Samples
+
+If the option is set in the config, samples of the tables for the NAKO are generated as CSV in the same format as the files for the NAKO. Parameters such as number and size of samples are set in the script [sample-nako-export.R](sample-nako-export.R). 
 
 # Descriptive statistics
 

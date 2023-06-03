@@ -33,6 +33,7 @@ nako:
   # compressing to 7z the NAKO export was reduced from 4GB to 25MB, moved in 
   # 1min).
   export_path: data/for-nako
+  generate_samples: true
 
 dataset_types:
   pia_questionnaires:
