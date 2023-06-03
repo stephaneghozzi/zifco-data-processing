@@ -364,7 +364,14 @@ The code book is converted from a nested list to a table with only relevant vari
 
 A variable "question_single" which identifies unique questions is built to match the corresponding variable in `answers`. It is the concatenation of `questionnaire_name`, "_v", `questionnaire_version`, "_f", `question_position`, "_", `answer_position`.
 
-The variable `is_decimal` is discrded because it is not obvious to interpret: it seems to be either missing or `FALSE`, the latter always for enumerable variables usually starting with "How many days ...". The variable `answer_type_id` is left, but what it means is unclear as well: does it give the type of the answer, like integer, character etc.? It is never missing and can be any integer between 1 and 8. Lastly, `answer_level` and `answer_position` always take them same value; both are kept pending a choice on the most significant one. 
+The variable `is_decimal` is discarded because it is not obvious to interpret: it seems to be either missing or `FALSE`, the latter always for enumerable variables usually starting with "How many days ...". The variable `answer_type_id` is left, but what it means is unclear as well: does it give the type of the answer, like integer, character etc.? It is never missing and can be any integer between 1 and 8. 
+
+Lastly, two variables look at the order of the possible answers:
+
+- `answer_level` counts the number of the answer (is it the first, the second, ...) when iterating through the code book
+- `answer_position` is directly read from the field `position` of the code book
+
+Both should always be the same but are kept for consistency checks. 
 
 ## Standardization of variable names
 
