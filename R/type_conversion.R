@@ -1,5 +1,5 @@
 # ...
-convert_type <- function(x, type, file_type, time_from_ger) {
+convert_type <- function(x, type, read_from_excel, time_from_ger) {
   
   if(is.factor(x)) {
     # Make sure we don't have factors.
@@ -20,7 +20,7 @@ convert_type <- function(x, type, file_type, time_from_ger) {
     
   } else if (type %in% c("date", "date_time")) {
     
-    x_ <- get_date_time(x, type, file_type, time_from_ger) 
+    x_ <- get_date_time(x, type, read_from_excel, time_from_ger) 
     
   } else if (type == "float") {
     
@@ -41,7 +41,7 @@ convert_type <- function(x, type, file_type, time_from_ger) {
 }
 
 # ...
-get_date_time <- function(x, type, file_type, time_from_ger) {
+get_date_time <- function(x, type, read_from_excel, time_from_ger) {
   # Date and date-time values are assumed to be either:
   # - for more than half of them, integers or strings containing only digits, 
   # which is the internal numeric representation of dates in R and other
@@ -68,7 +68,7 @@ get_date_time <- function(x, type, file_type, time_from_ger) {
     x <- suppressWarnings(as.numeric(x))
     x_ <- as.POSIXct(x*24*60*60, origin = "1970-01-01", tz = "UTC")
     
-  } else if (file_type %in% c("xls", "xlsx") & sum(x_num_xl) > length(x)/2) {  
+  } else if (read_from_excel & sum(x_num_xl) > length(x)/2) {  
     
     x <- suppressWarnings(as.numeric(x))
     x_ <- as.POSIXct(x*24*60*60, origin = "1899-12-30", tz = "UTC")

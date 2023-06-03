@@ -153,12 +153,16 @@ get_variable_properties_1 <- function(dataset_name, dataset_df,
   # Add reference properties
   var_prop_std$original <- var_names
   var_prop_std$dataset <- dataset_name
-  var_prop_std$file_type <- tail(
-    stringr::str_split_1(
-      config$datasets[[dataset_name]]$raw_data_file,
-      "\\."
-    ),
-    1
+  source_files <- list.files(
+    path = config$datasets[[dataset_name]]$raw_data_file, 
+    full.names = TRUE
+  )
+  source_files_extensions <- sapply(
+    source_files,
+    \(x) tail(stringr::str_split_1(tolower(x), "\\."), 1)
+  )
+  var_prop_std$read_from_excel <- all(
+    source_files_extensions %in% c("xls", "xlsx")
   )
   
   return(var_prop_std)
