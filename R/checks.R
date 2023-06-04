@@ -289,7 +289,11 @@ compute_matching_multiplicity <- function(ids_lookup) {
         dplyr::distinct() |>
         dplyr::group_by(dplyr::across(dplyr::all_of(v1))) |>
         dplyr::summarize(
-          multiplicity = length(dplyr::pick()[!is.na(dplyr::pick())])
+          multiplicity = length(
+            dplyr::pick(dplyr::everything())[
+              !is.na(dplyr::pick(dplyr::everything()))
+            ]
+          )
         )
     }
 
