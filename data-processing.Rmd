@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 doc_width <- 800
 options(width = doc_width)
 sample_size_print <- 1000L
+t_start_report <- Sys.time()
 
 library(DT)
 library(purrr)
@@ -1297,6 +1298,8 @@ Duration individual steps:
 - generate samples for NAKO: `r print_computation_time(t10, t9)`
 - check variable names and matching: `r print_computation_time(t11, t10)` 
 - check PIA answers: `r print_computation_time(t_end, t11)`
+
+Generating this report took about: `r print_computation_time(Sys.time(), t_start_report)`.
 
 ## Memory
 
