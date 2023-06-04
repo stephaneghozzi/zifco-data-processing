@@ -50,7 +50,8 @@ transform_for_nako <- function(dataset_list, config) {
   for_nako <- list(
     metadata = metadata_nako,
     data = dataset_list_nako,
-    questionnaire_names = questionnaire_names
+    questionnaire_names = questionnaire_names,
+    var_dict_nako = var_dict_nako
   )
   
   return(for_nako)
@@ -616,7 +617,14 @@ export_for_nako <- function(for_nako, config) {
     paste0(exp_dir, "/questionnaire-names.csv"),
     row.names = FALSE
   )
-    
+  
+  # Variable names dictionary
+  write.csv(
+    for_nako$var_dict_nako, 
+    paste0(exp_dir, "/variable-names-dictionary.csv"),
+    row.names = FALSE
+  )
+  
   # Data
   exp_data_dir <- paste0(exp_dir, "/data")
   dir.create(exp_data_dir, recursive = TRUE, showWarnings = FALSE)
