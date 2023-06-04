@@ -435,7 +435,8 @@ get_all_sample_part_pairs <- function(unique_id_value_pairs) {
       sh_d, 
       ph_d, 
       by = "participant_id_hub",
-      na_matches = "never"
+      na_matches = "never",
+      multiple = "all"
   ) |> 
     dplyr::select(-participant_id_hub)
     
@@ -452,13 +453,15 @@ get_all_sample_part_pairs <- function(unique_id_value_pairs) {
       sh_d,
       by = "participant_id_hub", 
       suffix = c("", "_tmp"),
-      na_matches = "never"
+      na_matches = "never",
+      multiple = "all"
     ) |> 
       dplyr::select(-participant_id_hub) |> 
       dplyr::inner_join(
         sp_d,
         by = c("sample_id_tmp" = "sample_id"),
-        na_matches = "never"
+        na_matches = "never",
+        multiple = "all"
       ) |> 
       dplyr::select(-sample_id_tmp)
     
