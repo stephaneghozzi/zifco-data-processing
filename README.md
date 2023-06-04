@@ -1,4 +1,6 @@
-This folder contains the files needed to clean and process ZIFCO data and to export them in files that can be contributed to the NAKO. Documentation is included as well. Details are described in "data-processing-confidential.html" and "data-processing-public.html". The original raw-data-set files are read from their original various folders on NEON, as set in "config.yml", see below. 
+This folder contains the files needed to clean and process ZIFCO data and to export them in files that can be contributed to the NAKO. Documentation is included as well. 
+
+Details are described in "data-processing-confidential.html" and "data-processing-public.html". The original raw-data-set files are read from their original various folders on NEON, as set in "config.yml", see below. 
 
 The files indicated with (*) are stored in the confidential folder on HZI's internal NEON: S:\PROJACTIVE\ZIFCO-NAKO-Daten\i.Vacc_Skripte\ZIFCO_cleaning\stephane-ghozzi\zifco-data-processing  
 
@@ -22,6 +24,8 @@ The files indicated with (*) are stored in the confidential folder on HZI's inte
 
 - "data-processing.Rproj" is the RStudio project used for development and execution of the R scripts
 
+- "issues.txt" a list of issues (possible improvements) for this project
+ 
 - "pipeline.R" is the R script containing the various functions called to load, process and export ZIFCO data, as well as perform various checks
 
 - "README.txt" is this document

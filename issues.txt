@@ -1,7 +1,7 @@
 Code:
 - make package
 - use the package targets
-- define in config which fields of the codebook are exported (but that might not be possible if filed-specific formatting or converting is required)
+- define in config which fields of the code book are exported (but that might not be possible if filed-specific formatting or converting is required)
 - organize package in modules: "NAKO generic", "PIA generic", "ZIFCO [this project] specific"
 - refactor, especially standardization of variable names
 - harmonize input/output code for data and meta data (map+do.call vs. for)	
@@ -11,15 +11,10 @@ Code:
 	- make it one function
 	- integrate it in NAKO export instead of re-loading data
 
-Task management:
-- produce clean issues and a clean backlog
-
 Report:
+- export full dictionary of variable names at each step, including in NAKO export
 - what data-set and variable names are used explicitly in code and cannot be changed in config
 - print data with non-missing comments
-- computation times
-- review that everything is exactly explained, e.g., what happens when two variables have the same name in two data sets but different meanings
-- appendix: memory, time, session info
 - some plots
 - dependencies to external libraries that change data (e.g., times and dates)
 - separate report in 
@@ -28,9 +23,9 @@ Report:
 	- manual interpretation and overview, no private data
 
 Documentation:
-- functions in code
+- functions
 - dependencies
-- procedure to process a new data set with new results
+- procedure to process a new dataset with new results
 
 Data processing:
 - change NAKO metadata, variable names without re-processing the data
@@ -39,7 +34,6 @@ Data processing:
 
 Other:
 - proper coding of missing values for NAKO beyond "-1" for all
-- make and upload package including contributions, tests, synthetic data
 - check_pia_multiple_answers very long: skip? memory? perform on sample?
 - config: add specific description for each PIA questionnaire
 

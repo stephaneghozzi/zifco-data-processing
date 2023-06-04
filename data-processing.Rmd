@@ -1279,13 +1279,13 @@ print(session_information)
 
 (All computation times on a MacBook Pro 13-inch, 2020, CPU: 2.3 GHz Quad-Core Intel Core i7, Memory: 32 GB 3733 MHz LPDDR4X. The orders of magnitude should not change much for comparable hardware.)
 
-The whole processing and NAKO export takes `r #print_computation_time(t_end, t_start)`.
+The whole processing and NAKO export takes `r print_computation_time(t_end, t_start)`.
 
 Exporting the complete output of the pipeline (i.e., saving the workspace) takes a few more minutes.
 
 Duration individual steps:
 
-- loading of raw data (see config about whether this was from initial files or from native RDS): `r #print_computation_time(t1, t_start)`
+- loading of raw data (see config about whether this was from initial files or from native RDS): `r print_computation_time(t1, t_start)`
 - read and process PIA code book: `r print_computation_time(t2, t1)`
 - get and standardize variable names: `r print_computation_time(t3, t2)`
 - standardize data: `r print_computation_time(t4, t3)`
@@ -1296,7 +1296,7 @@ Duration individual steps:
 - export for NAKO: `r print_computation_time(t9, t8)`
 - generate samples for NAKO: `r print_computation_time(t10, t9)`
 - check variable names and matching: `r print_computation_time(t11, t10)` 
-- check PIA answers: `r #print_computation_time(t_end, t11)`
+- check PIA answers: `r print_computation_time(t_end, t11)`
 
 ## Memory
 
