@@ -28,21 +28,28 @@ print_computation_time <- function(t1, t2) {
   
   if (abs(time_interval) < 60) {
     
-    time_interval_char <- paste0(time_interval, " seconds")
+    time_interval_char <- sinplu(time_interval, "second")
     
   } else if (abs(time_interval) < 3600) {
     
-    time_interval_char <- paste0(round(time_interval / 60), " minutes")
+    time_interval_char <- sinplu(round(time_interval / 60), "minute")
     
   } else {
     
     time_interval_char <- paste0(
-      round(time_interval / 3600), " hours ",
-      round((time_interval %% 3600) / 60), " minutes"
+      sinplu(floor(time_interval / 3600), "hour"),
+      " ",
+      sinplu(round((time_interval %% 3600) / 60), "minute")
     )
     
   }
   
   return(time_interval_char)
+  
+}
+
+sinplu <- function(quantity, noun) {
+  
+  paste0(quantity, " ", noun, ifelse(abs(quantity) > 1, "s", ""))
   
 }
