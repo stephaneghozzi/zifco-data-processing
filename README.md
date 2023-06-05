@@ -44,3 +44,7 @@ You can execute [update-nako-metadata.R](update-nako-metadata.R) to update the v
 - [README.md](README.md) is this document
 - [sample-nako-export.R](sample-nako-export.R) is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
 - [update-nako-metadata.R](update-nako-metadata.R) is a script that runs the end of the processing pipeline, e.g., to only change the description of variables and data sets the NAKO metadata exported
+
+## License
+
+The code is provided under an [MIT License](LICENSE).
