@@ -17,6 +17,12 @@ The report provided here is the public version: it doesn't contain any person-re
 
 By default, it is expected that the processing pipeline has been executed before.
 
+## Updated raw datasets
+
+When raw data are updated, the pipeline has to be executed again and the raw data have to be read from the initial files (not the RDS files). To do this change [config.yml](config.yml) by setting `read_native` to `false` before running the pipeline. 
+
+It is recommended to set `save_native` to `true` also: this saves those raw data as RDS which is much faster to read and use in R than the initial raw data files.
+
 ## Explore NAKO export
 
 You can execute [sample-nako-export.R](sample-nako-export.R) to generate samples of the datasets exported for the NAKO. This can allow one to explore individual datasets better than the sometimes large (and for Excel too large) full export. Parameters such as sample size and number of samples generated can be set in the script.
