@@ -30,7 +30,7 @@ config <- yaml::read_yaml(config_file)
 ```{r}
 # Either run the processing pipeline or load the results of a previous run
 # source("pipeline.R")
-load("data/pipeline-output.RData")
+load(config$pipeline_ouput$file)
 ```
 
 ```{r}
