@@ -376,7 +376,7 @@ The original files can be either RDS, JSON, Excel, or CSV files. In the first tw
 
 The code book is converted from a nested list to a table with only relevant variables kept. The variable types are set explicitly. The questionnaire version is read from the corresponding file name: if the latter ends with "(x)", where "x" is a number, then th version is x+1, otherwise the version is 1. For example, "2. Beobachtungsfragebogen AGI.json" is version 1 of that questionnaire, while "2. Beobachtungsfragebogen AGI(4).json" is version 5.
 
-A variable "question_single" which identifies unique questions is built to match the corresponding variable in `answers`. It is the concatenation of `questionnaire_name`, "\_v", `questionnaire_version`, "*f", `question_position`, "*", `answer_position`.
+A variable "question_single" which identifies unique questions is built to match the corresponding variable in `answers`. It is the concatenation of `questionnaire_name`, "\_v", `questionnaire_version`, "\*f", `question_position`, "\*", `answer_position`.
 
 The variable `is_decimal` is discarded because it is not obvious to interpret: it seems to be either missing or `FALSE`, the latter always for enumerable variables usually starting with "How many days ...". The variable `answer_type_id` is left, but what it means is unclear as well: does it give the type of the answer, like integer, character etc.? It is never missing and can be any integer between 1 and 8.
 
