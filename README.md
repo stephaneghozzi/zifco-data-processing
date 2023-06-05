@@ -1,35 +1,40 @@
-This folder contains the files needed to clean and process ZIFCO data and to export them in files that can be contributed to the NAKO. Documentation is included as well. 
+# Standardization, cleaning and export for NAKO of questionnaires and labor data of the project ZIFCO
 
-Details are described in "data-processing-confidential.html" and "data-processing-public.html". The original raw-data-set files are read from their original various folders on NEON, as set in "config.yml", see below. 
+This folder contains the files needed to clean and process ZIFCO data and to export them in files that can be contributed to the NAKO. A report, including detailed documentation of the processing pipeline, can be generated as well. A public version of the report is included: [data-processing-public.html](data-processing-public.html).
 
-The files indicated with (*) are stored in the confidential folder on HZI's internal NEON: S:\PROJACTIVE\ZIFCO-NAKO-Daten\i.Vacc_Skripte\ZIFCO_cleaning\stephane-ghozzi\zifco-data-processing  
+## Data processing pipeline
 
-- the folder "documents" contains references useful for the project, currently only the PDF file detailing the requirements for contributing 
+By default: To process the and export the data, download this repository, by default in a location where confidential can be stored. The raw datasets are expected to be available as RDS files in the folder [data/data-raw-rds/](data/data-raw-rds/) within this repository. 
 
-- (*) the folder "data" contains 
-  - the folder "data-processed-rds": data sets at the end of processing in the R-native format RDS,  which convenient for importing in R and keeps variable types and structures; meant as basis for further analyses 
-  - the folder "data-raw-rds": raw data in the format RDS
-  - the folder "for-nako": meta-data and data sets for contribution to the NAKO repository
-  - "pipeline-output.RData": the complete data generated at the end of the processing pipeline; this is an R workspace that can be readily imported in R; convenient mostly for generating the reports "data-processing-confidential.html" and "data-processing-public.html" without having to re-do the calculations
-  
-- the folder "R" contains the R scripts with all functions needed for processing and export of the data sets, as well as the performing of various checks
+Then you can execute the script [pipeline.R](pipeline.R). (We recommend opening first the RStudio project [data-processing.Rproj](data-processing.Rproj) and running the script from there.) It will read the raw data and PIA code book and save the processed datasets as well as export them in a format fulfilling NAKO's requirements.
 
-- "config.yml" is the configuration file for data processing, see details in "data-processing-public.html" or "data-processing-confidential.html"; it is a text-based format can be opened and edited with any text processing editor, it can also be viewed in any internet browser
+As detailed in the [report](data-processing-public.html), all paths can be changed and set in the file [config.yml](config.yml).
 
-- (*) "data-processing-confidential.html" is a documentation and report on the data processing and its results; it includes previews of data relating to individual participants
+## Generation of public and confidential reports
 
-- "data-processing-public.html" is the same as "data-processing-confidential.html" but it only contains information that can be publicly shared, i.e., no data relating to individual participants
+The report provided here is the public version: it doesn't contain any person-related data. To generate the full, confidential report: open [data-processing.Rmd](data-processing.Rmd), change the variable 
+`report_is_confidential` to `TRUE`.
 
-- "data-processing.Rmd" is the R source code to generate the documents "data-processing-public.html"
+By default, it is expected that the processing pipeline has been executed before.
 
-- "data-processing.Rproj" is the RStudio project used for development and execution of the R scripts
+## Explore NAKO export
 
-- "issues.txt" a list of issues (possible improvements) for this project
- 
-- "pipeline.R" is the R script containing the various functions called to load, process and export ZIFCO data, as well as perform various checks
+You can execute [sample-nako-export.R](sample-nako-export.R) to generate samples of the datasets exported for the NAKO. This can allow one to explore individual datasets better than the sometimes large (and for Excel too large) full export. Parameters such as sample size and number of samples generated can be set in the script.
 
-- "README.txt" is this document
+## Update NAKO metadata
 
-- "sample-nako-export.R" is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
+You can execute [update-nako-metadata.R](update-nako-metadata.R) to update the variable and names and descriptions as well as dataset descriptions for the NAKO without having to re-run the whole pipeline. This requires the pipeline has been run before and its output has been stored.
 
-- "update-nako-metadata.R" is a script that runs the end of the processing pipeline, e.g., to only change the description of variables and data sets the NAKO metadata exported
+## Folder content
+
+- the folder [documents/](documents/) contains references useful for the project
+- the folder [R/](R/) contains the R scripts with all functions needed for processing and export of the data sets, as well as the performing of various checks
+- [config.yml](config.yml) is the configuration file for data processing, see details in [data-processing-public.html](data-processing-public.html); it is a text-based format can be opened and edited with any text processing editor, it can also be viewed in any internet browser
+- [data-processing-public.html](data-processing-public.html) is a report documenting the data processing pipeline and presenting the results; it doesn't include previews of data relating to individual participants
+- [data-processing.Rmd](data-processing.Rmd) is the R source code to generate the reports
+- [data-processing.Rproj](data-processing.Rproj) is the RStudio project used for development and execution of the R scripts
+- [issues.md](issues.md) is a list of issues (possible improvements) for this project
+- [pipeline.R](pipeline.R) is the R script containing the various functions called to load, process and export ZIFCO data, as well as perform various checks
+- [README.md](README.md) is this document
+- [sample-nako-export.R](sample-nako-export.R) is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
+- [update-nako-metadata.R](update-nako-metadata.R) is a script that runs the end of the processing pipeline, e.g., to only change the description of variables and data sets the NAKO metadata exported
