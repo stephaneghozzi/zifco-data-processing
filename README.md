@@ -1,4 +1,4 @@
-# Standardization, cleaning and export for NAKO of questionnaires and labor data of the project ZIFCO
+# Standardization, cleaning and export for NAKO of questionnaires and laboratory data of the project ZIFCO
 
 This folder contains the files needed to clean and process ZIFCO data and to export them in files that can be contributed to the NAKO. A report, including detailed documentation of the processing pipeline, can be generated as well. A public version of the report is included: [data-processing-public.html](data-processing-public.html).
 
