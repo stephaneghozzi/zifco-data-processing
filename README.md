@@ -40,7 +40,7 @@ You can execute [update-nako-metadata.R](update-nako-metadata.R) to update the v
 - [data-processing.Rmd](data-processing.Rmd) is the R source code to generate the reports
 - [data-processing.Rproj](data-processing.Rproj) is the RStudio project used for development and execution of the R scripts
 - [issues.md](issues.md) is a list of issues (possible improvements) for this project
-- [LCIENSE](LCIENSE) the license of the project
+- [LICENSE](LICENSE) the license of the project
 - [pipeline.R](pipeline.R) is the R script containing the various functions called to load, process and export ZIFCO data, as well as perform various checks
 - [README.md](README.md) is this document
 - [sample-nako-export.R](sample-nako-export.R) is a script that reads the processing pipeline output and generates samples of the NAKO exports of the questionnaires
@@ -48,4 +48,4 @@ You can execute [update-nako-metadata.R](update-nako-metadata.R) to update the v
 
 ## License
 
-The code is provided under an [MIT License](LICENSE).
+The code is provided under an [MIT license](LICENSE).
