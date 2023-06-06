@@ -4,7 +4,7 @@ This folder contains the files needed to clean and process ZIFCO data and to exp
 
 ## Data processing pipeline
 
-By default: To process the and export the data, download this repository, by default in a location where confidential can be stored. The raw datasets are expected to be available as RDS files in the folder [data/data-raw-rds/](data/data-raw-rds/) within this repository. 
+By default: To process and export the data, download this repository in a location where confidential can be stored. The raw datasets are expected to be available as RDS files in the folder [data/data-raw-rds/](data/data-raw-rds/) within this repository. 
 
 Then you can execute the script [pipeline.R](pipeline.R). (We recommend opening first the RStudio project [data-processing.Rproj](data-processing.Rproj) and running the script from there.) It will read the raw data and PIA code book and save the processed datasets as well as export them in a format fulfilling NAKO's requirements.
 
